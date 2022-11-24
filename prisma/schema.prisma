@@ -19,6 +19,7 @@ model Post {
 model User {
   id    String @id @default(cuid())
   email String @unique
+  linearApiKey String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

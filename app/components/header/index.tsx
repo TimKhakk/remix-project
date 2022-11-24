@@ -1,5 +1,4 @@
 import { Link } from "@remix-run/react";
-import React from "react";
 import { useOptionalUser } from "~/utils";
 
 export default function Header() {
@@ -7,7 +6,7 @@ export default function Header() {
   return (
     <header>
       <nav className="container mx-auto mt-8">
-        <ul className="flex gap-3 ">
+        <ul className="flex gap-3">
           <li>
             <Link to="/posts" className="text-xl text-blue-600 underline">
               Blog Posts
@@ -18,22 +17,24 @@ export default function Header() {
               Posts Admin
             </Link>
           </li>
-          <li>
-            <Link to="/notes" className="text-xl text-blue-600 underline">
-              Notes
-            </Link>
-          </li>
+          {user && (
+            <>
+              <li>
+                <Link to="/notes" className="text-xl text-blue-600 underline">
+                  Notes
+                </Link>
+              </li>
 
-          <li>
-            <Link to="/daily-standup" className="text-xl text-blue-600 underline">
-              Daily Standup
-            </Link>
-          </li>
-          {/* {user && (
-            <li>
-              <p className="text-xl text-blue-600 underline">Logout</p>
-            </li>
-          )} */}
+              <li>
+                <Link
+                  to="/daily-standup"
+                  className="text-xl text-blue-600 underline"
+                >
+                  Daily Standup
+                </Link>
+              </li>
+            </>
+          )}
         </ul>
       </nav>
     </header>

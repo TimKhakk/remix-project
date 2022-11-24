@@ -8,12 +8,17 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
+import toastifyStylesUrl from "react-toastify/dist/ReactToastify.min.css";
+import { ToastContainer } from "react-toastify";
 
 import tailwindStylesheetUrl from "./styles/tailwind.css";
 import { getUser } from "./session.server";
 
 export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: tailwindStylesheetUrl }];
+  return [
+    { rel: "stylesheet", href: tailwindStylesheetUrl },
+    { rel: "stylesheet", href: toastifyStylesUrl },
+  ];
 };
 
 export const meta: MetaFunction = () => ({
@@ -40,6 +45,12 @@ export default function App() {
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
+        <ToastContainer
+          position="bottom-right"
+          autoClose={4000}
+          theme="colored"
+          newestOnTop
+        />
       </body>
     </html>
   );

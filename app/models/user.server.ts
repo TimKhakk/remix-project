@@ -1,5 +1,8 @@
-import type { Password, User } from "@prisma/client";
+import { LinearClient, LinearError } from "@linear/sdk";
 import bcrypt from "bcryptjs";
+import type { Password, User } from "@prisma/client";
+import type { LinearFetch, Issue } from "@linear/sdk";
+import type { LightIssue } from "~/routes/daily-standup";
 
 import { prisma } from "~/db.server";
 
@@ -59,4 +62,79 @@ export async function verifyLogin(
   const { password: _password, ...userWithoutPassword } = userWithPassword;
 
   return userWithoutPassword;
+}
+
+export async function getUserLinearIssuesByApiKey(apiKey: string) {
+  const linearClient = new LinearClient({
+    apiKey,
+  })
+  async function getMyIssues(linearClient: LinearClient): LinearFetch<Issue[]> {
+    const me = await linearClient.viewer;
+
+    const myIssues = await me.assignedIssues({
+      filter: {
+        cycle: {
+          or: {
+            isPrevious: {
+              eq: true,
+            },
+            isActive: {
+              eq: true,
+            },
+          },
+        },
+      },
+    });
+
+    return myIssues.nodes;
+  }
+
+  try {
+    const issues = await getMyIssues(linearClient);
+    const prepared: LightIssue[] = issues.map((issue) => ({
+      id: issue.id,
+      url: issue.url,
+      identifier: issue.identifier,
+      title: issue.title,
+      branchName: issue.branchName,
+    }));
+
+    return {
+      issues: prepared,
+    };
+
+  } catch (error) {
+    if (error instanceof LinearError) {
+    		error.errors?.map((graphqlError) => {
+    			console.log('Error message', graphqlError.message);
+    			console.log('LinearErrorType of this GraphQL error', graphqlError.type);
+    			console.log('Error due to user input', graphqlError.userError);
+    			console.log('Path through the GraphQL schema', graphqlError.path);
+    		});
+    		// TODO handle linear error
+    		return {
+          issues: [],
+    			errors: {
+    				message: error.message,
+    				type: 'linear'
+    			},
+    		};
+    }
+    return {
+      issues: [],
+      errors: {
+        type: 'unknown'
+      }
+    }
+  }
+}
+
+export async function updateLinearApiKey({
+  id,
+  linearApiKey,
+}: {
+  id: User['id'];
+  linearApiKey: string;
+}) {
+  return prisma.user.update({ where: { id }, data: { linearApiKey }})
 }
