@@ -63,6 +63,8 @@ export async function requireUser(request: Request) {
   throw await logout(request);
 }
 
+const weekInSeconds = 60 * 60 * 24 * 7;
+
 export async function createUserSession({
   request,
   userId,
@@ -80,7 +82,7 @@ export async function createUserSession({
     headers: {
       "Set-Cookie": await sessionStorage.commitSession(session, {
         maxAge: remember
-          ? 60 * 60 * 24 * 7 // 7 days
+          ? weekInSeconds
           : undefined,
       }),
     },

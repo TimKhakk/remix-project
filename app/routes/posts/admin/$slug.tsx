@@ -9,7 +9,6 @@ import {
   useLoaderData,
   useTransition,
 } from "@remix-run/react";
-import { useEffect, useLayoutEffect, useState } from "react";
 
 const inputClassName = `w-full rounded border border-gray-500 px-2 py-1 text-lg`;
 
@@ -64,14 +63,17 @@ export const action: ActionFunction = async ({ request, params }) => {
 
 export default function PostSlug() {
   const { post } = useLoaderData<LoaderData>();
-  const transition = useTransition();
-  const isUpdating = Boolean(transition.submission);
+  const {
+    state,
+    submission,
+  } = useTransition();
+  const isUpdating = Boolean(submission);
   const errors = useActionData();
 
   return (
     <main className="mx-auto max-w-4xl">
       <h1 className="my-6 border-b-2 text-center text-3xl">{post.title}</h1>
-      {transition.state === "loading" ? (
+      {state === "loading" ? (
         <>Loading...</>
       ) : (
         <>
