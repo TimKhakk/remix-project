@@ -41,7 +41,6 @@ export default function Settings() {
 
   // TODO custom hook
   useEffect(() => {
-    console.log('🚀 ~ searchParams', searchParams);
     if (searchParams.has('wrongLinearApiKey')) {
       toast("Your linear api key is invalid! Please Update it", {
         type: 'error',
@@ -64,7 +63,7 @@ export default function Settings() {
   return (
     <div className="mx-auto max-w-4xl">
       <Form method="post" className="flex flex-col gap-2 p-2">
-        <label className="block text-sm font-medium text-gray-700">
+        <label className="block text-sm font-medium">
           Linear Api Key
           <input
             required
