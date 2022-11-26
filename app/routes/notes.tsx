@@ -16,13 +16,13 @@ export default function NotesPage() {
 
   return (
     <div className="flex h-full min-h-screen flex-col">
-      <main className="flex h-full bg-white">
-        <div className="h-full w-80 border-r bg-gray-50">
-          <Link to="new" className="block p-4 text-xl text-blue-500">
+      <main className="flex h-full">
+        <div className="h-full w-80 border-r border-app-primary-900">
+          <Link to="new" className="block p-4 text-blue-500">
             + New Note
           </Link>
 
-          <hr />
+          <hr className="border-app-primary-900"/>
 
           {data.noteListItems.length === 0 ? (
             <p className="p-4">No notes yet</p>
@@ -32,11 +32,12 @@ export default function NotesPage() {
                 <li key={note.id}>
                   <NavLink
                     className={({ isActive }) =>
-                      `block border-b p-4 text-xl ${isActive ? "bg-white" : ""}`
+                      `border-b border-app-primary-900 p-4 flex gap-2 items-center ${isActive ? "bg-app-primary-900" : ""}`
                     }
                     to={note.id}
                   >
-                    📝 {note.title}
+                    <i className="ri-sticky-note-line"></i>
+                    {note.title}
                   </NavLink>
                 </li>
               ))}

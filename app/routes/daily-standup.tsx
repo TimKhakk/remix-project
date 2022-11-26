@@ -18,7 +18,7 @@ export type LightIssue = Pick<
 export default function NotesPage() {
   return (
     <div className="flex h-full min-h-screen flex-col">
-      <header className="bg-app-primary-dark p-4 border-gray-400 border-b">
+      <header className="bg-app-primary-dark p-4 border-app-primary-900 border-b">
         <nav>
           <ul className="flex gap-3 items-center">
             <AppNavLink to="./" icon="ri-hammer-line">Builder</AppNavLink>

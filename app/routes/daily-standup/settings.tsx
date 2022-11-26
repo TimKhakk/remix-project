@@ -5,6 +5,8 @@ import { updateLinearApiKey } from "~/models/user.server";
 import { getUserId, logout } from "~/session.server";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
+import { Button } from "~/components/shared/Button";
+import { useUser } from "~/utils";
 
 const LINEAR_API_KEY = "linear-api-key";
 
@@ -28,56 +30,65 @@ export async function action({ request }: ActionArgs) {
 
   await updateLinearApiKey({ id, linearApiKey });
 
-  return json({
-    message: 'The linear api key is updated!',
-  }, {
-    status: 200,
-  });
+  return json(
+    {
+      message: "The linear api key is updated!",
+    },
+    {
+      status: 200,
+    }
+  );
 }
 
 export default function Settings() {
-  const [searchParams, setSearchParams] = useSearchParams()
-  const actionData = useActionData<typeof action>()
+  const user = useUser();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const actionData = useActionData<typeof action>();
 
   // TODO custom hook
   useEffect(() => {
-    if (searchParams.has('wrongLinearApiKey')) {
+    if (searchParams.has("wrongLinearApiKey")) {
       toast("Your linear api key is invalid! Please Update it", {
-        type: 'error',
-      })
-      setSearchParams(new URLSearchParams())
+        type: "error",
+      });
+      setSearchParams(new URLSearchParams());
     }
-  }, [searchParams, setSearchParams])
-
+  }, [searchParams, setSearchParams]);
 
   // TODO custom hook
   useEffect(() => {
     if (actionData?.message) {
       toast(actionData.message, {
-        type: 'success',
-      })
+        type: "success",
+      });
     }
-  }, [actionData])
-
+  }, [actionData]);
 
   return (
-    <div className="mx-auto max-w-4xl">
-      <Form method="post" className="flex flex-col gap-2 p-2">
-        <label className="block text-sm font-medium">
-          Linear Api Key
-          <input
-            required
-            className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
-            type="text"
-            name={LINEAR_API_KEY}
-          />
-        </label>
-        <button
-          type="submit"
-          className="w-full rounded bg-blue-500  py-2 px-4 text-white hover:bg-blue-600 focus:bg-blue-400"
-        >
-          Update
-        </button>
+    <div className="mx-auto my-6 w-[935px] rounded border-app-primary-800 bg-app-primary-900">
+      <Form method="post" className="flex flex-col gap-2">
+        <div className="grid grid-cols-2 p-8">
+          <div>
+            <h2>Daily Standup Settings</h2>
+          </div>
+          <label className="flex flex-col gap-2 text-sm font-medium">
+            Linear Api Key
+            <input
+              required
+              defaultValue={user.linearApiKey}
+              className="w-full rounded border border-gray-500 bg-app-primary-900 px-2 py-1"
+              type="text"
+              name={LINEAR_API_KEY}
+            />
+          </label>
+        </div>
+
+        <div className="flex items-center justify-end gap-1 border-t border-app-primary-800 py-4 px-8">
+          <Button type="reset">Cancel</Button>
+          <Button variant="primary" type="submit">
+            Save
+          </Button>
+        </div>
       </Form>
     </div>
   );

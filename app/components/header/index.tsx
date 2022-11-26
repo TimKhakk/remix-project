@@ -43,7 +43,7 @@ export const HeaderWrapper = ({
 }) => (
   <header
     className={cn(
-      "fixed top-0 bottom-0 flex flex-col gap-4 border-r border-gray-400 bg-[#031C30] p-6",
+      "fixed top-0 bottom-0 flex flex-col gap-4 border-r border-app-primary-900 bg-[#031C30] p-4",
       left,
       width
     )}
@@ -70,7 +70,7 @@ export default function Header() {
           <AppNavLink icon="ri-todo-line" to="/notes">
             Notes
           </AppNavLink>
-          <AppNavLink icon="ri-calendar-todo-line" to="/daily-standup">
+          <AppNavLink icon="ri-calendar-todo-line" to="/daily-standup/">
             Daily Standup
           </AppNavLink>
         </>

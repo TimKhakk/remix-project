@@ -4,7 +4,7 @@ import { Form, useActionData, useTransition } from "@remix-run/react";
 import invariant from "tiny-invariant";
 import type { ActionFunction } from "@remix-run/node";
 
-const inputClassName = `w-full rounded border border-gray-500 px-2 py-1 text-lg`;
+const inputClassName = `w-full rounded border bg-app-primary-dark border-gray-500 px-2 py-1 text-lg`;
 
 type ActionData =
   | {
