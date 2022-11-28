@@ -6,7 +6,6 @@ import type { LoaderArgs } from "@remix-run/node";
 import { requireUser } from "~/session.server";
 import { getUserLinearIssuesByApiKey } from "~/models/user.server";
 import { Button } from "~/components/shared/Button";
-import { marked } from "marked";
 import { CheckBox } from "~/components/shared/Checkbox";
 
 export const EMPTY_LINEAR_API_KEY_SEARCH_PARAM = 'emptyLinearApiKey';
@@ -199,11 +198,6 @@ export default function Index() {
             </ul>
           </div>
         )}
-        <div
-          contentEditable="true"
-          className="border border-gray-400"
-          dangerouslySetInnerHTML={{ __html: marked(parse(selectedIssues)) }}
-        ></div>
       </div>
     </main>
   );
