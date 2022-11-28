@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { useEffect } from "react";
 import { Button } from "~/components/shared/Button";
 import { useUser } from "~/utils";
+import { EMPTY_LINEAR_API_KEY_SEARCH_PARAM, WRONG_LINEAR_API_KEY_SEARCH_PARAM } from "./index";
 
 const LINEAR_API_KEY = "linear-api-key";
 
@@ -47,8 +48,14 @@ export default function Settings() {
 
   // TODO custom hook
   useEffect(() => {
-    if (searchParams.has("wrongLinearApiKey")) {
-      toast("Your linear api key is invalid! Please Update it", {
+    if (searchParams.has(WRONG_LINEAR_API_KEY_SEARCH_PARAM)) {
+      toast("Your linear api key is invalid! Please update it", {
+        type: "error",
+      });
+      setSearchParams(new URLSearchParams());
+    }
+    if (searchParams.has(EMPTY_LINEAR_API_KEY_SEARCH_PARAM)) {
+      toast("Your linear api key is not set! Please set it", {
         type: "error",
       });
       setSearchParams(new URLSearchParams());

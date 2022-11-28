@@ -6,12 +6,17 @@ import type { LoaderArgs } from "@remix-run/node";
 import { requireUser } from "~/session.server";
 import { getUserLinearIssuesByApiKey } from "~/models/user.server";
 import { Button } from "~/components/shared/Button";
+import { marked } from "marked";
+import { CheckBox } from "~/components/shared/Checkbox";
+
+export const EMPTY_LINEAR_API_KEY_SEARCH_PARAM = 'emptyLinearApiKey';
+export const WRONG_LINEAR_API_KEY_SEARCH_PARAM = 'wrongLinearApiKey';
 
 export async function loader({ request }: LoaderArgs) {
   const user = await requireUser(request);
 
   if (!user.linearApiKey) {
-    throw redirect("/daily-standup/settings");
+    throw redirect(`/daily-standup/settings?${EMPTY_LINEAR_API_KEY_SEARCH_PARAM}`);
   }
 
   const { issues, errors } = await getUserLinearIssuesByApiKey(
@@ -19,7 +24,7 @@ export async function loader({ request }: LoaderArgs) {
   );
 
   if (errors) {
-    throw redirect("/daily-standup/settings?wrongLinearApiKey");
+    throw redirect(`/daily-standup/settings?${WRONG_LINEAR_API_KEY_SEARCH_PARAM}`);
   }
 
   return json({
@@ -34,32 +39,6 @@ export type LightIssue = Pick<
 
 type SelectedIssues = Record<"forToday" | "forYesterday", LightIssue[]>;
 
-const CheckBox = ({
-  label,
-  checked,
-  onChange,
-}: {
-  label: string;
-  checked: boolean;
-  onChange: () => void;
-}) => (
-  <label className="flex cursor-pointer items-center gap-2 rounded px-2 hover:bg-gray-400">
-    <input
-      className="hidden appearance-none"
-      type="checkbox"
-      defaultChecked={false}
-      checked={checked}
-      onChange={onChange}
-    />
-    {!checked ? (
-      <i className="ri-checkbox-blank-circle-line"></i>
-    ) : (
-      <i className="ri-checkbox-circle-fill"></i>
-    )}
-    <span>{label}</span>
-  </label>
-);
-
 const ROW_MAX_CHARS = 40;
 
 export default function Index() {
@@ -68,7 +47,7 @@ export default function Index() {
   const contentRef = useRef<HTMLDivElement>();
 
   const [selectedIssues, setSelectedIssues] = useState<SelectedIssues>({
-    forToday: [issues[0]], // TODO remove
+    forToday: [],
     forYesterday: [],
   });
 
@@ -100,11 +79,18 @@ export default function Index() {
 
   const handleCopy = () => {
     const contentInnerText = contentRef.current?.innerText;
-    console.log('contentRef.current', contentRef.current);
+    // console.log("contentRef.current", contentRef.current);
+    // contentRef.current?.focus()
+    const range = document.createRange();
+    // range.selectNode(contentRef.current);
+    // window?.getSelection().removeAllRanges();
+    // window?.getSelection().addRange(range);
+    console.log('🚀 ~ range', range);
+    document.execCommand('copy');
 
     if (!contentInnerText) return;
 
-    navigator.clipboard.writeText(contentInnerText);
+    // navigator.clipboard.writeText(parse(selectedIssues));
   };
 
   const hasSelectedIssues = Boolean(
@@ -119,7 +105,7 @@ export default function Index() {
   return (
     <main className="grid h-full grid-cols-2 bg-app-primary-dark">
       <div className="h-full border-r border-app-primary-900 p-6">
-        <div className="min-h-[32px] mb-3 flex items-center justify-between gap-2">
+        <div className="mb-3 flex min-h-[32px] items-center justify-between gap-2">
           <h2 className="text-lg font-bold">Issues</h2>
           {isAnyIssueChecked && (
             <Button onClick={handleClear} className="flex items-center gap-1">
@@ -170,14 +156,14 @@ export default function Index() {
       </div>
 
       <div className="flex-1 p-6">
-        <div className="min-h-[32px] mb-3 flex items-center justify-between gap-2">
+        <div className="mb-3 flex min-h-[32px] items-center justify-between gap-2">
           <h2 className="text-lg font-bold">Preview</h2>
-          {contentShown && (
+          {/* {contentShown && (
             <Button onClick={handleCopy} className="flex items-center gap-1">
               <i className="ri-file-copy-line"></i>
               Copy
             </Button>
-          )}
+          )} */}
         </div>
         {contentShown && (
           <div contentEditable="true" ref={contentRef}>
@@ -197,9 +183,7 @@ export default function Index() {
                 </li>
               ))}
             </ul>
-            {isForTodayChecked && (
-              <strong>What are you doing today?</strong>
-            )}
+            {isForTodayChecked && <strong>What are you doing today?</strong>}
             <ul className="list-disc pl-4">
               {selectedIssues.forToday.map((issue) => (
                 <li key={issue.id}>
@@ -215,6 +199,11 @@ export default function Index() {
             </ul>
           </div>
         )}
+        <div
+          contentEditable="true"
+          className="border border-gray-400"
+          dangerouslySetInnerHTML={{ __html: marked(parse(selectedIssues)) }}
+        ></div>
       </div>
     </main>
   );
