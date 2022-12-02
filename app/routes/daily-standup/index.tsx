@@ -165,7 +165,7 @@ export default function Index() {
           )} */}
         </div>
         {contentShown && (
-          <div contentEditable="true" ref={contentRef}>
+          <div contentEditable="true" className="text-base" ref={contentRef}>
             {isForYesterdayChecked && (
               <strong>What did you do yesterday?</strong>
             )}
