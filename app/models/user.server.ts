@@ -5,6 +5,7 @@ import type { LinearFetch, Issue } from "@linear/sdk";
 import type { LightIssue } from "~/routes/daily-standup";
 
 import { prisma } from "~/db.server";
+import { sortBy } from "lodash";
 
 export type { User, Post } from "@prisma/client";
 
@@ -91,13 +92,15 @@ export async function getUserLinearIssuesByApiKey(apiKey: string) {
 
   try {
     const issues = await getMyIssues(linearClient);
-    const prepared: LightIssue[] = issues.map((issue) => ({
-      id: issue.id,
-      url: issue.url,
-      identifier: issue.identifier,
-      title: issue.title,
-      branchName: issue.branchName,
-    }));
+
+    const prepared: LightIssue[] = sortBy(issues
+      .map((issue) => ({
+        id: issue.id,
+        url: issue.url,
+        identifier: issue.identifier,
+        title: issue.title,
+        branchName: issue.branchName,
+      })), 'identifier');
 
     return {
       issues: prepared,
