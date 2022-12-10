@@ -22,6 +22,7 @@ export default function NotesPage() {
         <nav>
           <ul className="flex gap-3 items-center">
             <AppNavLink to="./" icon="ri-hammer-line">Builder</AppNavLink>
+            <AppNavLink to="./points" icon="ri-play-circle-line">Points</AppNavLink>
             <AppNavLink to="./settings" icon="ri-settings-5-line">Settings</AppNavLink>
           </ul>
         </nav>

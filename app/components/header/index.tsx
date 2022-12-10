@@ -59,7 +59,7 @@ export default function Header() {
   return (
     <HeaderWrapper>
       <AppNavLink icon="ri-home-line" to="/">
-        Home <span className="text-yellow-200 text-sm">alpha v0.1</span>
+        Home <span className="text-yellow-200 text-sm">alpha v0.2</span>
       </AppNavLink>
       <AppNavLink icon="ri-pen-nib-line" to="/posts">
         Posts

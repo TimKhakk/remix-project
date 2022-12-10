@@ -6,6 +6,8 @@ import type { LightIssue } from "~/routes/daily-standup";
 
 import { prisma } from "~/db.server";
 import { sortBy } from "lodash";
+import { linearErrorCreator } from "~/lib/linearApi/linearErrorCreator";
+import { unknowErrorCreator } from "~/lib/api/unknowErrorCreator";
 
 export type { User, Post } from "@prisma/client";
 
@@ -107,28 +109,11 @@ export async function getUserLinearIssuesByApiKey(apiKey: string) {
     };
 
   } catch (error) {
+    const restResBody = { issues: [] };
     if (error instanceof LinearError) {
-    		error.errors?.map((graphqlError) => {
-    			console.log('Error message', graphqlError.message);
-    			console.log('LinearErrorType of this GraphQL error', graphqlError.type);
-    			console.log('Error due to user input', graphqlError.userError);
-    			console.log('Path through the GraphQL schema', graphqlError.path);
-    		});
-    		// TODO handle linear error
-    		return {
-          issues: [],
-    			errors: {
-    				message: error.message,
-    				type: 'linear'
-    			},
-    		};
+      return linearErrorCreator(error, restResBody);
     }
-    return {
-      issues: [],
-      errors: {
-        type: 'unknown'
-      }
-    }
+    return unknowErrorCreator(restResBody);
   }
 }
 

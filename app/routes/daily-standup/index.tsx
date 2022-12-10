@@ -15,6 +15,7 @@ import { PreviewSelectedIssues } from "~/components/daily-standups/PreviewSelect
 
 export const EMPTY_LINEAR_API_KEY_SEARCH_PARAM = "emptyLinearApiKey";
 export const WRONG_LINEAR_API_KEY_SEARCH_PARAM = "wrongLinearApiKey";
+export const UNKNOWN_ERROR_SEARCH_PARAM = "unknowError";
 
 export async function loader({ request }: LoaderArgs) {
   const user = await requireUser(request);
