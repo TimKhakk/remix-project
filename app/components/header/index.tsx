@@ -73,6 +73,9 @@ export default function Header() {
           <AppNavLink icon="ri-calendar-todo-line" to="/daily-standup/">
             Daily Standup
           </AppNavLink>
+          <AppNavLink icon="ri-play-circle-line" to="/cycles/">
+            Cycles
+          </AppNavLink>
         </>
       )}
       <li className="mt-auto flex items-center gap-4 rounded py-2 px-4 text-app-white-200">

@@ -20,13 +20,6 @@ export default function Index() {
                     Daily Standup Builder
                   </span>
                 </h1>
-                {/* <a className="bg-black" href="https://remix.run">
-                  <img
-                    src="https://user-images.githubusercontent.com/1500684/158298926-e45dafff-3544-4b69-96d6-d3bcc33fc76a.svg"
-                    alt="Remix"
-                    className="mx-auto w-full max-w-[12rem] md:max-w-[16rem]"
-                  />
-                </a> */}
                 <div className="mx-auto mt-10 max-w-sm sm:flex sm:max-w-none sm:justify-center">
                   {user ? (
                     <Link

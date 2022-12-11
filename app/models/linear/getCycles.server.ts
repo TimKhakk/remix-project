@@ -1,5 +1,6 @@
 import { LinearClient, LinearError } from "@linear/sdk";
 import type { LinearFetch, Cycle, Issue } from "@linear/sdk";
+import type { TeamScope } from "~/routes/cycles/points";
 import { linearErrorCreator } from "~/lib/linearApi/linearErrorCreator";
 import { unknowErrorCreator } from "~/lib/api/unknowErrorCreator";
 import { sortBy } from "lodash";
@@ -8,7 +9,13 @@ const countAllPointsFromIssues = (issueNodes: Issue[]) => (
   issueNodes.reduce((prev, curr) => (curr?.estimate ?? 0) + prev, 0)
 )
 
-export async function getCycles(apiKey: string) {
+export async function getCycles({
+  apiKey,
+  teamScope,
+}: {
+  apiKey: string;
+  teamScope: TeamScope;
+}) {
   const linearClient = new LinearClient({
     apiKey,
   });
@@ -56,7 +63,7 @@ export async function getCycles(apiKey: string) {
         cyclesFilter: {
           team: {
             name: {
-              eq: "Front-End",
+              eq: teamScope,
             },
           },
         },
