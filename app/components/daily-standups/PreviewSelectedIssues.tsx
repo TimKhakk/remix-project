@@ -26,15 +26,15 @@ export const PreviewSelectedIssues = forwardRef(
     const isForTodayChecked = Boolean(selectedIssues.forToday.length);
 
     return (
-      <div contentEditable="true" className="text-base" ref={contentRef}>
+      <div contentEditable="true" className="text-base font-normal" ref={contentRef}>
         {isForYesterdayChecked && <strong>What did you do yesterday?</strong>}
-        <ul className="list-disc pl-4 text-base">
+        <ul className="list-disc pl-4">
           {selectedIssues.forYesterday.map((issue) => (
             <PreviewItem key={issue.id} {...issue}/>
           ))}
         </ul>
         {isForTodayChecked && <strong>What are you doing today?</strong>}
-        <ul className="list-disc pl-4 text-base">
+        <ul className="list-disc pl-4">
           {selectedIssues.forToday.map((issue) => (
             <PreviewItem key={issue.id} {...issue}/>
           ))}
