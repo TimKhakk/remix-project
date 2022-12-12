@@ -9,7 +9,7 @@ interface Props {
 }
 
 const PreviewItem = ({ url, identifier, title }: LightIssue) => (
-  <li className="text-base">
+  <li className="text-[14px]">
     <a
       href={url}
       className="cursor-pointer text-blue-500 hover:text-blue-400 hover:underline"
@@ -26,7 +26,7 @@ export const PreviewSelectedIssues = forwardRef(
     const isForTodayChecked = Boolean(selectedIssues.forToday.length);
 
     return (
-      <div contentEditable="true" className="text-base font-normal" ref={contentRef}>
+      <div contentEditable="true" className="text-[14px] font-normal" ref={contentRef}>
         {isForYesterdayChecked && <strong>What did you do yesterday?</strong>}
         <ul className="list-disc pl-4">
           {selectedIssues.forYesterday.map((issue) => (
